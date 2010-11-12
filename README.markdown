@@ -49,7 +49,7 @@ $orientation = $image->getOrientation();
 
 </pre>
 
-It's possible to manually manipulate the image through an ImageDecorator, though it's recommended that this is achieved 
+It's possible to manually manipulate the image through an ImageDecorator, though it's recommended that this is achieved
 through a ThumbnailFactory. Nevertheless, here are some examples.
 
 Resizing an image:
@@ -186,4 +186,18 @@ catch(BoxUK\Obscura\Exception $e) {
     // Handle error
 }
 
+</pre>
+
+### Unit Testing
+
+Obscura is substantially unit tested. To run the tests, you'll need PHPUnit installed and in your path. Then you can run
+
+<pre>
+> phpunit tests/php
+</pre>
+
+or, if you have phing installed,
+
+<pre>
+phing tests
 </pre>
