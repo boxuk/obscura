@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project name="Obscura" basedir="." default="test">
+
+    <target name="test" description="Run tests">
+        <exec command="phpunit --testdox --log-junit log/phpunit.xml tests/php/" passthru="true" checkreturn="true" />
+    </target>
+
+</project>
