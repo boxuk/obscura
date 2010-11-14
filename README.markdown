@@ -199,5 +199,5 @@ Obscura is substantially unit tested. To run the tests, you'll need PHPUnit inst
 or, if you have phing installed,
 
 <pre>
-phing tests
+phing test
 </pre>
