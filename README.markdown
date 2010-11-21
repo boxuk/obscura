@@ -126,7 +126,7 @@ catch(\InvalidArgumentException $e) {
     // handle error
 }
 
-// Resize foo.jpg to 200 pixels high and mount onto a 250x250 black background, convert to GIF and output to 'bar.gif'
+// Resize foo.jpg to 200 pixels high and mount onto a 250x250 black background, convert to GIF and save as 'bar.gif'
 
 $config = new Config();
 
@@ -199,5 +199,5 @@ Obscura is substantially unit tested. To run the tests, you'll need PHPUnit inst
 or, if you have phing installed,
 
 <pre>
-phing test
+> phing test
 </pre>

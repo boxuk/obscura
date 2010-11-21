@@ -1,5 +1,7 @@
 <?php
 
+namespace BoxUK\Obscura;
+
 /**
  * Include this file to bootstrap the library. Registers an SPL autoloader to automatically detect and load library
  * class files at runtime.
@@ -10,7 +12,7 @@
  * @since 1.0
  */
 
-function boxuk_autoload( $rootDir ) {
+function autoload( $rootDir ) {
     spl_autoload_register(function( $className ) use ( $rootDir ) {
         $file = sprintf(
             '%s/%s.php',
@@ -23,4 +25,4 @@ function boxuk_autoload( $rootDir ) {
     });
 }
 
-boxuk_autoload( __DIR__ );
+autoload( __DIR__ );
