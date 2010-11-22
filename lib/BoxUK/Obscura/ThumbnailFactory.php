@@ -17,7 +17,7 @@ use BoxUK\Obscura\ThumbnailFactory\Config;
 class ThumbnailFactory {
 
     /**
-     * @var Obscura_ImageDecorator_Factory
+     * @var BoxUK\Obscura\ImageDecorator\Factory
      */
     private $factory;
 
@@ -47,6 +47,8 @@ class ThumbnailFactory {
     }
 
     /**
+     * Returns the path to the directory from which input images will be loaded.
+     *
      * @return string
      */
     public function getInputDirectory() {
@@ -73,6 +75,8 @@ class ThumbnailFactory {
     }
 
     /**
+     * Returns the path to the directory at which thumbnails will be saved.
+     *
      * @return string
      */
     public function getOutputDirectory() {
@@ -142,6 +146,7 @@ class ThumbnailFactory {
     }
 
     /**
+     * Resizes the input image according to the user's configuration.
      *
      * @param BoxUK\Obscura\ImageDecorator $image
      * @param BoxUK\Obscura\ThumbnailFactory\Config $config
@@ -206,6 +211,14 @@ class ThumbnailFactory {
 
     }
 
+    /**
+     * Mounts the thumbnail onto a background image according to the user's configuration.
+     *
+     * @param BoxUK\Obscura\ImageDecorator $image
+     * @param BoxUK\Obscura\Config $config
+     *
+     * @return BoxUK\Obscura\ImageDecorator
+     */
     private function mountThumbnail(ImageDecorator $image, Config $config) {
 
         $mountEnabled = $config->getMountEnabled();
@@ -249,7 +262,7 @@ class ThumbnailFactory {
     /**
      * Returns the path to the input image
      *
-     * @param Config $config
+     * @param BoxUK\Obscura\Config $config
      *
      * @return string
      *
@@ -320,6 +333,7 @@ class ThumbnailFactory {
     }
 
     /**
+     * Returns a file extension appropriate for the image type.
      *
      * @param BoxUK\Obscura\ThumbnailFactory\Config $config
      *
