@@ -99,7 +99,7 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
         $path = 'tests/tmp/' . $filename;
 
         $this->assertTrue( file_exists($path) );
-        $this->assertEquals( 'thumb-e8953a164b2894e9b5fc20c3e5c81eca.jpg', $filename);
+        $this->assertEquals( 'thumb-'.md5(serialize($config)).'.jpg', $filename);
 
         $dimensions = getimagesize($path);
 

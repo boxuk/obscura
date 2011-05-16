@@ -7,21 +7,21 @@ use BoxUK\Obscura\ImageDecorator;
 require_once 'tests/php/bootstrap.php';
 
 class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
-    
+
     /**
      * @var Obscura_ImageDecorator_Mock
      */
     protected $object;
 
     /**
-     * 
+     *
      */
     protected function setUp() {
         $this->object = new \Obscura_ImageDecorator_Mock( new Factory );
     }
 
     /**
-     * 
+     *
      */
     public function testGetImage() {
 
@@ -33,7 +33,7 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
      *
      */
     public function testGetWidthAndGetHeight() {
-        
+
         $this->assertEquals(400, $this->object->getWidth());
         $this->assertEquals(200, $this->object->getHeight());
 
@@ -90,8 +90,60 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testCreatesCroppedImagesWithWidthAndHeightSpecified() {
+        // Resizing to new width and height.
+        $image = $this->object->crop(200, 100);
+
+        $this->assertTrue($image instanceof ImageDecorator);
+
+        $this->assertEquals(200, $image->getWidth());
+        $this->assertEquals(100, $image->getHeight());
+    }
+
+    public function testCreatesCroppedImagesWithOnlyWidthSpecified() {
+        // Resizing by width only, original height.
+        $image = $this->object->crop(300);
+        $this->assertEquals(300, $image->getWidth());
+        $this->assertEquals(200, $image->getHeight());
+    }
+
+    public function testCreatesCroppedImagesWithOnlyHeightSpecified() {
+        // Resizing by height only, original width.
+        $image = $this->object->crop(null, 50);
+        $this->assertEquals(400, $image->getWidth());
+        $this->assertEquals(50, $image->getHeight());
+    }
+
     /**
-     * 
+     * Crop a 400 x 200 test image to 100 x 100.  The test image is a centered 100 x 100 red square inside a blue rectangle: cropping it, we'd expect a 100 x 100
+     * red square image.
+     */
+    public function testCropUsesCorrectPortionOfOriginalImage() {
+        $this->object = new \Obscura_ImageDecorator_Mock(new Factory, 'tests/resources/test_jpeg_400_x_200_crop.jpg');
+        $image = $this->object->crop(100, 100);
+
+        $aPoints = array(
+            'topLeft' => array(0, 0),
+            'topRight' => array(99, 0),
+            'bottomLeft' => array(0, 99),
+            'bottomRight' => array(99, 99),
+        );
+
+        foreach ($aPoints as $name => $aXAndY) {
+            $color = imagecolorat($image->getImage(), $aXAndY[0], $aXAndY[1]);
+            $aIndexedColors = imagecolorsforindex($image->getImage(), $color);
+
+            /*
+             * Use assertLessThan() and assertGreaterThan() as due to JPEG compression, the colours may not be exactly right.
+             * As long as each pixel is almost completely red, with very little blue, we have cropped correctly.
+             */
+            $this->assertGreaterThan(250, $aIndexedColors['red']);
+            $this->assertLessThan(10, $aIndexedColors['blue']);
+        }
+    }
+
+    /**
+     *
      */
     public function testMountsImagesOntoBackground() {
 
@@ -113,7 +165,7 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * 
+     *
      */
     public function testCanDetermineOrientation() {
 
@@ -132,7 +184,7 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * 
+     *
      */
     public function testImageCanBeConvertedToAnArray() {
 
@@ -164,7 +216,7 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * 
+     *
      */
     public function testCanCreateCanvasForModifyingImages() {
 
@@ -175,5 +227,5 @@ class AbstractDecoratorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(100, imagesy($canvas));
 
     }
-    
+
 }
