@@ -336,7 +336,7 @@ class Config {
     }
 
     /**
-     * Sets the output filename of the thumbnail
+     * Sets the input filename of the thumbnail
      *
      * @param string $filename
      *
