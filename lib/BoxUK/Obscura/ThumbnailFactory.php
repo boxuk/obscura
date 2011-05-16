@@ -123,7 +123,7 @@ class ThumbnailFactory {
 
         $outputFilename = $this->getFilenameForThumbnail($config);
         $pathToThumbnail = $this->outputDirectory . DIRECTORY_SEPARATOR . $outputFilename;
-        
+
         // If a thumbnail already exists for the configuration, do nothing
         if($config->getCachingEnabled() && $this->thumbnailExistsAndIsFresh($pathToInputImage, $pathToThumbnail)) {
 
@@ -131,7 +131,12 @@ class ThumbnailFactory {
 
         }
 
-        $this->resizeThumbnail($image, $config);
+        if ($config->getCrop()) {
+            $this->cropThumbnail($image, $config);
+        }
+        else {
+            $this->resizeThumbnail($image, $config);
+        }
 
         $this->mountThumbnail($image, $config);
 
@@ -150,7 +155,7 @@ class ThumbnailFactory {
      *
      * @param BoxUK\Obscura\ImageDecorator $image
      * @param BoxUK\Obscura\ThumbnailFactory\Config $config
-     * 
+     *
      * @return ImageDecorator
      */
     private function resizeThumbnail(ImageDecorator $image, Config $config) {
@@ -212,6 +217,31 @@ class ThumbnailFactory {
     }
 
     /**
+     * Crops the thumbnail according to the user's configuration.
+     *
+     * @param BoxUK\Obscura\ImageDecorator $image
+     * @param BoxUK\Obscura\Config $config
+     *
+     * @return BoxUK\Obscura\ImageDecorator
+     */
+    private function cropThumbnail(ImageDecorator $image, Config $config) {
+        $width = $config->getWidth();
+        $height = $config->getHeight();
+
+        // If both width and height are set, then crop to those values.
+        if ($width && $height) {
+            return $image->crop($width, $height);
+        }
+        else if ($width) {
+            return $image->crop($width);
+        }
+        else if ($height) {
+            return $image->crop(null, $height);
+        }
+        return;
+    }
+
+    /**
      * Mounts the thumbnail onto a background image according to the user's configuration.
      *
      * @param BoxUK\Obscura\ImageDecorator $image
@@ -235,7 +265,7 @@ class ThumbnailFactory {
         if($mountWidth && $mountHeight) {
             return $image->mount($mountWidth, $mountHeight, $mountColor);
         }
-        
+
         // Else if neither have been specified, create a square using the length of the longest dimension
         else if(! $mountWidth && ! $mountHeight) {
             if($image->getOrientation() == ImageDecorator::ORIENTATION_LANDSCAPE) {

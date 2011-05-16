@@ -86,7 +86,7 @@ interface ImageDecorator {
      * @param BoxUK\Obscura\ImageDecorator\Factory $factory
      */
     public function setFactory( Factory $factory );
-    
+
     /**
      * Returns the factory that this object uses to create images
      *
@@ -114,6 +114,16 @@ interface ImageDecorator {
      * @return BoxUK\Obscura\ImageDecorator
      */
     public function resize($width=null, $height=null, $preserveAspectRatio=false);
+
+    /**
+     * Crops the image from the center to the given dimensions.
+     *
+     * @param int $width The width to resize to.  If omitted, original width is used.
+     * @param int $height The height to resize to.  If omitted, original height is used.
+     *
+     * @return BoxUK\Obscura\ImageDecorator
+     */
+    public function crop($width=null, $height=null);
 
     /**
      * Mounts the image onto a colored background.
@@ -150,7 +160,7 @@ interface ImageDecorator {
      * @return int
      */
     public function getOrientation();
-    
+
     /**
      * Calculates a proportial length for a dimension to maintain the current aspect ratio.
      *

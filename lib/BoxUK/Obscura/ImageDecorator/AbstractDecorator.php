@@ -224,6 +224,48 @@ abstract class AbstractDecorator implements ImageDecorator {
     }
 
     /**
+     * @see BoxUK\Obscura\ImageDecorator::crop
+     *
+     * @param int $width The width to resize to.  If omitted, original width is used.
+     * @param int $height The height to resize to.  If omitted, original height is used.
+     *
+     * @return BoxUK\Obscura\ImageDecorator
+     */
+    public function crop($width=null, $height=null) {
+        $originalWidth = $this->getWidth();
+        $originalHeight = $this->getHeight();
+
+        if (intval($width) == 0) {
+            $width = $originalWidth;
+        }
+
+        if (intval($height) == 0) {
+            $height = $originalHeight;
+        }
+
+        $image = $this->createCanvas($width, $height);
+
+        $xMid = $originalWidth / 2;
+        $yMid = $originalHeight / 2;
+
+        imagecopyresampled(
+            $image,
+            $this->getImage(),
+            0,
+            0,
+            $xMid - ($width / 2),
+            $yMid - ($height / 2),
+            $width,
+            $height,
+            $width,
+            $height
+        );
+
+        return $this->load($image);
+
+    }
+
+    /**
      * @see BoxUK\Obscura\ImageDecorator::mount
      *
      * @param int $width

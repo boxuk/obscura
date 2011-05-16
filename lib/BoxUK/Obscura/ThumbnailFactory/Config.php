@@ -19,7 +19,7 @@ class Config {
 
     /**
      * Desired height of the thumbnail
-     * 
+     *
      * @var int
      */
     private $height;
@@ -92,8 +92,15 @@ class Config {
     private $imageType;
 
     /**
+     * If true, create thumbnails using cropping, rather than resizing.
+     *
+     * @var boolean
+     */
+    private $crop = false;
+
+    /**
      * Sets the quality of the thumbnail. Does not apply to all image types. Defaults to 100% (i.e. no loss in quality).
-     * 
+     *
      * @var int
      */
     private $imageQuality = 100;
@@ -263,7 +270,7 @@ class Config {
         if(! is_null($width) && ! is_int($width)) {
             throw new \InvalidArgumentException('Mount width must be an integer or null.');
         }
-        
+
         $this->mountWidth = $width;
 
         return $this;
@@ -315,7 +322,7 @@ class Config {
         if((! is_array($color) && ! is_string($color)) || empty($color)) {
             throw new \InvalidArgumentException('Mount color must be an non-empty array or string');
         }
-        
+
         $this->mountColor = $color;
 
         return $this;
@@ -329,7 +336,7 @@ class Config {
     }
 
     /**
-     * Sets the output filename of the thumbnail
+     * Sets the input filename of the thumbnail
      *
      * @param string $filename
      *
@@ -411,7 +418,7 @@ class Config {
     /**
      * Sets the image quality of the thumbnail. Does not apply to all image types. Defaults to 100% (i.e. no loss in
      * quality). Should be expressed as a percentage.
-     * 
+     *
      * @param int $imageQuality
      *
      * @return BoxUK\Obscura\ThumbnailFactory\Config
@@ -431,6 +438,32 @@ class Config {
     /**
      * @return boolean
      */
+    public function getCrop() {
+        return $this->crop;
+    }
+
+    /**
+     * Sets a flag that determines whether thumbnails should be created with cropping, or not (if false, the resize method is used).
+     *
+     * @param boolean $crop True if cropping should be used, false if resizing should be used.
+     *
+     * @return BoxUK\Obscura\ThumbnailFactory\Config
+     *
+     * @throws InvalidArgumentException if the argument type is not a boolean
+     */
+    public function setCrop($crop) {
+        if ((!is_bool($crop))) {
+            throw new \InvalidArgumentException('Crop flag must be expressed as a boolean.');
+        }
+
+        $this->crop = $crop;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
     public function getCachingEnabled() {
         return $this->cachingEnabled;
     }
@@ -438,7 +471,7 @@ class Config {
     /**
      * Sets a flag that determines whether thumbnail caching should be applied.
      *
-     * @param int $cachingEnabled
+     * @param boolean $cachingEnabled
      *
      * @return BoxUK\Obscura\ThumbnailFactory\Config
      *
