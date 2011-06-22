@@ -29,33 +29,33 @@ Obscura provides a set of classes that follow the decorator pattern. These class
 so developers can work with images using a single API regardless of the image type. The recommended way to create an
 image decorator is to use an instance of a ImageDecoratorFactory:
 
-<pre>
-
+```php
+<?php
 use BoxUK\Obscura\ImageDecorator\Factory;
 
 $factory = new Factory();
 $image = $factory->loadImageFromFile('image.jpeg');
-
-</pre>
+```
 
 The decorator will provide you with useful data about the image:
 
-<pre>
-
+```php
+<?php
+// ...
 $width = $image->getWidth();
 $height = $image->getHeight();
 $imageType = $image->getImageType();
 $orientation = $image->getOrientation();
-
-</pre>
+```
 
 It's possible to manually manipulate the image through an ImageDecorator, though it's recommended that this is achieved
 through a ThumbnailFactory. Nevertheless, here are some examples.
 
 Resizing an image:
 
-<pre>
-
+```php
+<?php
+// ...
 // Resize to 100 by 200 pixels
 $image->resize(100, 200);
 
@@ -64,22 +64,22 @@ $image->resize(100, null, true);
 
 // Resize to 200 pixels high, preserving the aspect ratio
 $image->resize(null, 200, true);
-
-</pre>
+```
 
 One can also mount the image onto a background using the mount() method:
 
-<pre>
-
+```php
+<?php
+// ...
 // Mounting the image onto a red background 200 pixels wide by 200 pixels high:
 $image->mount(200, 200, '#FF0000');
-
-</pre>
+```
 
 To output an image, use the output() method:
 
-<pre>
-
+```php
+<?php
+// ...
 // Outputting an image to a file named 'foo.jpg'
 $image->output('foo.jpg');
 
@@ -88,8 +88,7 @@ $image->output(null, IMAGETYPE_GIF);
 
 // Outputting an image to a file named 'foo.jpg' with 50% quality
 $image->output('foo.jpg', null, 50);
-
-</pre>
+```
 
 ### Working with a Thumbnail Factory
 
@@ -98,22 +97,21 @@ the minimum amount of configuration, especially when altering a large batch of i
 
 A ThumbnailFactory must be constructed with an instance of an ImageDecorator Factory:
 
-<pre>
-
+```php
+<?php
 use BoxUK\Obscura\ThumbnailFactory;
 use BoxUK\Obscura\ImageDecorator\Factory;
 
 // Create a thumbnail factory
 $factory = new ThumbnailFactory( new Factory() );
-
-</pre>
+```
 
 The next step is to create a ThumbnailFactory Config object which details how thumbnails are to be created. Here are
 some configuration examples - please see the class documentation for a complete list of options. An
 InvalidArgumentException will be thrown if the object is supplied with an invalid configuration value.
 
-<pre>
-
+```php
+<?php
 use BoxUK\Obscura\ThumbnailFactory\Config;
 
 $config = new Config();
@@ -143,39 +141,39 @@ try {
 catch(\InvalidArgumentException $e) {
     // handle error
 }
-
-</pre>
+```
 
 A nice feature is the constraining of a thumbnail's longest dimension to a certain size. This is helpful when displaying
 a set of images in a grid, since it ensures that a thumbnail never exceeds its bounds:
 
-<pre>
-
+```php
+<?php
+// ...
 // Ensure that the thumbnail never exceeds 200 pixels wide. A unique filename will be generated automatically.
 $config->setInputFilename('foo.jpg')->setSizeConstraint(200);
-
-</pre>
+```
 
 Once the object has been configured to taste, it is passed to the thumbnail factory which parses the options and
 creates a thumbnail, returning the filename of the new image. An exception will be thrown if the factory is unable
 to create the thumbnail.
 
-<pre>
-
+```php
+<?php
+// ...
 try {
     $filename = $factory->createThumbnail($config);
 }
 catch(BoxUK\Obscura\Exception $e) {
     // Handle error
 }
-
-</pre>
+```
 
 If so desired, the factory can be told to not create a thumbnail if one already exists for the source image and the
 given configuration. This is enabled through a configuration setting:
 
-<pre>
-
+```php
+<?php
+// ...
 // Generate a thumbnail only if the source image has changed
 $config->setInputFilename('foo.jpg')->setWidth(100)->setCachingEnabled(true);
 
@@ -185,8 +183,7 @@ try {
 catch(BoxUK\Obscura\Exception $e) {
     // Handle error
 }
-
-</pre>
+```
 
 ### Unit Testing
 
