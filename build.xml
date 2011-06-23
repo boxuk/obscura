@@ -8,4 +8,13 @@
         <exec command="phpunit --testdox --log-junit log/phpunit.xml tests/php/" passthru="true" checkreturn="true" />
     </target>
 
+    <target name="pear-package">
+        <exec command="php package.php"
+              passthru="true"
+              checkReturn="true" />
+        <exec command="pear package lib/package.xml"
+              passthru="true"
+              checkReturn="true" />
+    </target>
+
 </project>
