@@ -1,4 +1,16 @@
 <?php
+/**
+ * Package file for creating PEAR packages. This file defines how the PEAR
+ * package should be constructed.
+ *
+ * Before a new tag is made, VERSION should be incremented to the new tag identifier.
+ *
+ * @author    Box UK <opensource@boxuk.com>
+ * @copyright Copyright (c) 2011, Box UK
+ * @license   http://opensource.org/licenses/mit-license.php MIT License and http://www.gnu.org/licenses/gpl.ht$
+ * @link      http://github.com/boxuk/describr
+ * @since     1.0.0
+ */
 
 define( 'VERSION', '1.1.0' );
 
