@@ -22,7 +22,7 @@ $packagexml->setNotes( "-" );
 $packagexml->setPackageType( 'php' );
 $packagexml->setPhpDep( '5.3.0' );
 $packagexml->setPearinstallerDep( '1.3.0' );
-$packagexml->addMaintainer( 'lead', 'support', 'support', 'support@boxuk.com' );
+$packagexml->addMaintainer( 'lead', 'boxuk', 'boxuk', 'opensource@boxuk.com' );
 $packagexml->setLicense( 'MIT License', 'http://opensource.org/licenses/mit-license.php' );
 $packagexml->generateContents();
 $packagexml->writePackageFile();
