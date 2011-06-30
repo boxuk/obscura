@@ -12,21 +12,28 @@
  * @since     1.0.0
  */
 
-define( 'VERSION', '1.1.0' );
+define( 'VERSION', '1.1.1' );
+define( 'BOXUK_PEAR_CHANNEL', 'pear.gavd-desktop'); # 'pear.boxuk.net' );
 
 require_once( 'PEAR/PackageFileManager2.php' );
 require_once( 'PEAR/PackageFileManager/File.php' );
 
+$aFilesToIgnore = array();
+$aFilesToIgnore[] = 'bootstrap.php';
+
 $packagexml = new PEAR_PackageFileManager2;
+$packagexml->addPackageDepWithChannel('package', 'Autoload', BOXUK_PEAR_CHANNEL, '1.0.0');
+
 $packagexml->setOptions(array(
     'packagedirectory' => 'lib',
-    'baseinstalldir' => '/'
+    'baseinstalldir' => '/',
+    'ignore' => $aFilesToIgnore
 ));
         
 $packagexml->setPackage( 'obscura' );
 $packagexml->setSummary( 'Image Library' );
 $packagexml->setDescription( 'A modern, license friendly PHP Image / Thumbnail library.' );
-$packagexml->setChannel( 'pear.boxuk.net' );
+$packagexml->setChannel( BOXUK_PEAR_CHANNEL );
 $packagexml->setAPIVersion( VERSION );
 $packagexml->setReleaseVersion( VERSION );
 $packagexml->setReleaseStability( 'stable' );
