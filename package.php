@@ -13,7 +13,7 @@
  */
 
 define( 'VERSION', '1.1.1' );
-define( 'BOXUK_PEAR_CHANNEL', 'pear.gavd-desktop'); # 'pear.boxuk.net' );
+define( 'BOXUK_PEAR_CHANNEL', 'pear.boxuk.net' );
 
 require_once( 'PEAR/PackageFileManager2.php' );
 require_once( 'PEAR/PackageFileManager/File.php' );
