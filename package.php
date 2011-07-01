@@ -12,7 +12,7 @@
  * @since     1.0.0
  */
 
-define( 'VERSION', '1.1.1' );
+define( 'VERSION', '1.1.2' );
 define( 'BOXUK_PEAR_CHANNEL', 'pear.boxuk.net' );
 
 require_once( 'PEAR/PackageFileManager2.php' );
