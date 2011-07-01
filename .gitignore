@@ -3,3 +3,4 @@ nbproject
 lib/package.xml
 catalog.xml
 *.tgz
+tests/htdocs/tmp/*
