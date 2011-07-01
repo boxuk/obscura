@@ -17,7 +17,7 @@ function testTransparentGif( ThumbnailFactory $factory ) {
     
     $config = new Config();
     $config->setCachingEnabled( false )
-            ->setInputFilename( 'transparent.gif' )
+            ->setInputFilename( $_GET['file'] . '.gif' )
             ->setAspectRatioLock( true )
             ->setWidth( 100 );
     
