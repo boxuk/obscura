@@ -69,19 +69,12 @@ class GIF extends AbstractDecorator {
      */
     public function createCanvas( $width, $height ) {
 
-        $canvas = imagecreatetruecolor ($width, $height);
-
-        // preserve transparency
-        $image = $this->getImage();
-        $transparentIndex = imagecolortransparent( $image );
-        if ( $transparentIndex > -1 ) { // has transparency
-            $transparentColor = imagecolorsforindex( $image, $transparentIndex ); // get
-
-            imagecolortransparent( $canvas,
-                imagecolorallocate( $canvas, $transparentColor['red'], $transparentColor['green'], $transparentColor['blue'] )
-            ); // set
-        }
-
+        $canvas = imagecreatetruecolor( $width, $height );
+        $white = imagecolorallocate( $canvas, 255, 255, 255 );
+        
+        imagefill( $canvas, 0, 0, $white );
+        imagecolortransparent( $canvas, $white );
+        
         return $canvas;
 
     }
