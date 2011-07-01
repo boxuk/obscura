@@ -1,0 +1,18 @@
+
+body {
+    background-color: #ccc;
+}
+
+td {
+    border: 2px #aaa solid;
+    position: relative;
+    padding: 15px;
+}
+
+td span {
+    display: block;
+    position: absolute;
+    right: 3px;
+    bottom: 1px;
+    font-size: 10px;
+}

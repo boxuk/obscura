@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>Obscura: Reference Tests</title>
+
+<link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+
+<body>
+
+<h1>Obscura Reference Tests</h1>
+
+<p>This page lists dynamic images from Obscura against reference images.  This
+    can then be used to visually identify problems with the library.</p>
+
+<h2>Transparent Gifs</h2>
+
+<ol>
+    <li>
+        <table>
+            <tr>
+                <td>
+                    <img src="image.php?test=transparentGif" />
+                    <span>obscura</span>
+                </td>
+                <td>
+                    <img src="reference/transparentGif.png" />
+                    <span>reference</span>
+                </td>
+            </tr>
+        </table>
+        <p>Image shows 'itv' logo with a transparent background (nothing outside
+        the blue area of the image).</p>
+    </li>
+</ol>
+
+</body>
+</html>
