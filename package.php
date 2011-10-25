@@ -3,7 +3,9 @@
  * Package file for creating PEAR packages. This file defines how the PEAR
  * package should be constructed.
  *
- * Before a new tag is made, VERSION should be incremented to the new tag identifier.
+ * usage: php package.php VERSION {channel}
+ *  VERSION is required
+ *  {CHANNEL}
  *
  * @author    Box UK <opensource@boxuk.com>
  * @copyright Copyright (c) 2011, Box UK
@@ -12,11 +14,21 @@
  * @since     1.0.0
  */
 
-define( 'VERSION', '1.1.2' );
-define( 'BOXUK_PEAR_CHANNEL', 'pear.boxuk.net' );
-
 require_once( 'PEAR/PackageFileManager2.php' );
 require_once( 'PEAR/PackageFileManager/File.php' );
+
+@list( $IGNORE, $version, $channel ) = $_SERVER['argv'];
+
+if ( !$version ) {
+    echo "usage: php package.php VERSION {CHANNEL}\n";
+    echo " VERSION is required\n";
+    echo " {CHANNEL} is optional\n";
+    exit( 1 );
+}
+if( !$channel ) {
+    $channel = 'pear.boxuk.net';
+}
+define( 'BOXUK_PEAR_CHANNEL', $channel );
 
 $aFilesToIgnore = array();
 $aFilesToIgnore[] = 'bootstrap.php';
@@ -34,8 +46,8 @@ $packagexml->setPackage( 'obscura' );
 $packagexml->setSummary( 'Image Library' );
 $packagexml->setDescription( 'A modern, license friendly PHP Image / Thumbnail library.' );
 $packagexml->setChannel( BOXUK_PEAR_CHANNEL );
-$packagexml->setAPIVersion( VERSION );
-$packagexml->setReleaseVersion( VERSION );
+$packagexml->setAPIVersion( $version );
+$packagexml->setReleaseVersion( $version );
 $packagexml->setReleaseStability( 'stable' );
 $packagexml->setAPIStability( 'stable' );
 $packagexml->setNotes( "-" );
