@@ -150,9 +150,8 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals( $thumbnail1Time, filemtime($path) );
 
         // Update the image modified time - should result in the creation of a new thumbnail
-        touch('tests/resources/test_jpeg_400_x_200.jpg');
+        touch($path, time() + 3600);
         clearstatcache();
-        sleep(1);
         
         $filename3 = $this->object->createThumbnail($config);
 
