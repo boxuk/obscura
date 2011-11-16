@@ -90,10 +90,9 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
         $config = new Config;
         $config->setInputFilename('test_jpeg_400_x_200.jpg')
                ->setWidth(100)
-               ->setHeight(300);
+               ->setHeight(300)
+               ->setOutputFilename(null);
 
-        // Create one with height and width but with no filename
-        $config->setWidth(100)->setHeight(300)->setOutputFilename(null);
         $filename = $this->object->createThumbnail($config);
 
         $path = 'tests/tmp/' . $filename;
