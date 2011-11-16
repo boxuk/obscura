@@ -30,19 +30,91 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function thumbnail_configurations() {
+
+	$inputFilename          = 'test_jpeg_400_x_200.jpg';
+	$landscapeInputFilename = 'test_jpeg_200_x_400.jpg';
+
+	$outputFilename = 'thumbnail.jpg';
+
+        $fixed_width = new Config;
+        $fixed_width->setInputFilename($inputFilename)
+                    ->setWidth(200)
+                    ->setOutputFilename($outputFilename);
+
+        $fixed_height = new Config;
+        $fixed_height->setInputFilename($inputFilename)
+                     ->setHeight(100)
+                     ->setOutputFilename($outputFilename);
+
+        $generated_filename = new Config;
+        $generated_filename->setInputFilename($inputFilename)
+                           ->setWidth(100)
+                           ->setHeight(300);
+
+        $constrained = new Config;
+        $constrained->setInputFilename($inputFilename)
+                    ->setSizeConstraint(200)
+                    ->setOutputFilename($outputFilename);
+
+        $arbitrary = new Config;
+        $arbitrary->setInputFilename($inputFilename)
+                  ->setMountEnabled(true)
+                  ->setMountWidth(600)
+                  ->setMountHeight(400)
+                  ->setOutputFilename($outputFilename);
+
+        $mount_fixed_width = new Config;
+        $mount_fixed_width->setInputFilename($inputFilename)
+                          ->setMountEnabled(true)
+                          ->setMountWidth(600)
+                          ->setOutputFilename($outputFilename);
+
+        $mount_fixed_height = new Config;
+        $mount_fixed_height->setInputFilename($inputFilename)
+                           ->setMountEnabled(true)
+                           ->setMountHeight(400)
+                           ->setOutputFilename($outputFilename);
+
+        $mount_square_portrait = new Config;
+        $mount_square_portrait->setInputFilename($inputFilename)
+                              ->setMountEnabled(true)
+                              ->setOutputFilename($outputFilename);
+
+        $mount_square_landscape = new Config;
+        $mount_square_landscape->setInputFilename($landscapeInputFilename)
+                               ->setMountEnabled(true)
+                               ->setOutputFilename($outputFilename);
+
+        return array(
+            "Creates thumbnail with height in proportion when only width given"
+                    => array( $fixed_width,  $outputFilename, 200, 100 ),
+            "Creates thumbnail with width in proportion when only height given"
+                    => array( $fixed_height, $outputFilename, 200, 100 ),
+            "Creates thumbnail with generated filename if no one given"
+                    => array( $generated_filename, 
+                              'thumb-'.md5(serialize($generated_filename)).'.jpg', 
+                              100, 300 ),
+            "Creates thumbnail constrained to given size"
+                    => array( $constrained,  $outputFilename, 200, 100 ),
+            "Can mount thumbnail with arbitrary size"
+                    => array( $arbitrary,    $outputFilename, 600, 400 ),
+            "Can mount thumbnail with only width given (defaults height to thumbnail's)"
+                    => array( $mount_fixed_width,  $outputFilename, 600, 200 ),
+            "Can mount thumbnail with only height given (defaults width to thumbnail's)"
+                    => array( $mount_fixed_height, $outputFilename, 400, 400 ),
+            "Mounting thumbnail with no width nor height creates square mount (portrait)" 
+                   => array( $mount_square_portrait,  $outputFilename, 400, 400 ),
+            "Mounting thumbnail with no width nor height creates square mount (landscape)" 
+                   => array( $mount_square_landscape, $outputFilename, 400, 400 ),
+        );
+    }
+
     /**
-     * Set only a width - height should be automatically set in proportion
+     * @dataProvider thumbnail_configurations
      */
-    public function testCreatesAThumbnailResizedToANewWidthWithAspectRatioLocked() {
+    public function testCreatesAThumbnail($config, $outputFilename, $expected_width, $expected_height) {
 
-        $outputFilename = 'thumbnail.jpg';
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setWidth(200)
-               ->setOutputFilename($outputFilename);
-
-        // Test with only a width - height should be automatically set in proportion
         $filename = $this->object->createThumbnail($config);
 
         $path = 'tests/tmp/' . $filename;
@@ -52,199 +124,18 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
 
         $dimensions = getimagesize($path);
 
-        $this->assertEquals( 200, $dimensions[0] );
-        $this->assertEquals( 100, $dimensions[1] );
+        $this->assertEquals( $expected_width,  $dimensions[0] );
+        $this->assertEquals( $expected_height, $dimensions[1] );
 
         unlink($path);
-    }
-
-    /**
-     * Set only a height - width should be automatically set in proportion
-     */
-    public function testCreatesAThumbnailResizedToANewHeightWithAspectRatioLocked() {
-
-        $outputFilename = 'thumbnail.jpg';
-        
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setHeight(100)
-               ->setOutputFilename($outputFilename);
-
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-        $this->assertEquals( $outputFilename, $filename );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 200, $dimensions[0] );
-        $this->assertEquals( 100, $dimensions[1] );
-
-        unlink($path);
-    }
-
-    public function testCreatesAThumbnailResizedToANewWidthAndHeightWithAGeneratedFilename() {
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setWidth(100)
-               ->setHeight(300)
-               ->setOutputFilename(null);
-
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-        $this->assertEquals( 'thumb-'.md5(serialize($config)).'.jpg', $filename);
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 100, $dimensions[0] );
-        $this->assertEquals( 300, $dimensions[1] );
-
-        unlink($path);
-
-    }
-
-    public function testCreatesThumbnailsConstrainedToGivenSize() {
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setSizeConstraint(200);
-
-        // Landscape
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 200, $dimensions[0] );
-        $this->assertEquals( 100, $dimensions[1] );
-
-        unlink($path);
-
-        // Portrait
-        $config->setInputFilename('test_jpeg_200_x_400.jpg');
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 100, $dimensions[0] );
-        $this->assertEquals( 200, $dimensions[1] );
-
-        unlink($path);
-
-    }
-
-    public function testCanMountAThumbnailWithArbitraryWidthAndHeight() {
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setMountEnabled(true)
-               ->setMountWidth(600)
-               ->setMountHeight(400);
-
-        // Landscape
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 600, $dimensions[0] );
-        $this->assertEquals( 400, $dimensions[1] );
-
-        unlink($path);
-
-    }
-
-    public function testCanMountingAThumbnailSupplyingOnlyAMountWidthDefaultsTheMountHeightToThatOfTheThumbnail() {
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setMountEnabled(true)
-               ->setMountWidth(600);
-
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 600, $dimensions[0] );
-        $this->assertEquals( 200, $dimensions[1] );
-
-        unlink($path);
-
-    }
-
-    public function testCanMountingAThumbnailSupplyingOnlyAMountHeightDefaultsTheMountWidthToThatOfTheThumbnail() {
-
-        $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')
-               ->setMountEnabled(true)
-               ->setMountHeight(400);
-
-        $filename = $this->object->createThumbnail($config);
-
-        $path = 'tests/tmp/' . $filename;
-
-        $this->assertTrue( file_exists($path) );
-
-        $dimensions = getimagesize($path);
-
-        $this->assertEquals( 400, $dimensions[0] );
-        $this->assertEquals( 400, $dimensions[1] );
-
-        unlink($path);
-
-    }
-
-    public function testCanMountingAThumbnailWithoutSpecifyingWidthOrHeightCreatesASquareMount() {
-
-        // Test portrait and landscape
-        $images = array('test_jpeg_400_x_200.jpg', 'test_jpeg_200_x_400.jpg');
-        
-        $config = new Config;
-        $config->setMountEnabled(true);
-
-        foreach($images as $image) {
-            $config->setInputFilename($image);
-
-            $filename = $this->object->createThumbnail($config);
-
-            $path = 'tests/tmp/' . $filename;
-
-            $this->assertTrue( file_exists($path) );
-
-            $dimensions = getimagesize($path);
-
-            $this->assertEquals( 400, $dimensions[0] );
-            $this->assertEquals( 400, $dimensions[1] );
-
-            unlink($path);
-        }
-        
     }
 
     public function testDoesntCreateThumbnailsIfOneExistsAndImageHasntChanged() {
 
         $config = new Config;
-        $config->setInputFilename('test_jpeg_400_x_200.jpg')->setWidth(200)->setCachingEnabled(true);
+        $config->setInputFilename('test_jpeg_400_x_200.jpg')
+               ->setWidth(200)
+               ->setCachingEnabled(true);
 
         $filename = $this->object->createThumbnail($config);
 
