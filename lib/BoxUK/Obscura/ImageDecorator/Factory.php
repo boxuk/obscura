@@ -51,8 +51,8 @@ class Factory {
             throw new \InvalidArgumentException( "Image file does not exist at {$pathToImage}" );
         }
 
-        $data = getimagesize( $pathToImage );
-
+        $data = @getimagesize( $pathToImage );
+        
         if(! $data) {
             throw new Exception( 'Unable to parse image data' );
         }

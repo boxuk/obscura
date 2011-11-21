@@ -183,7 +183,7 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException BoxUK\Obscura\Exception
      */
     public function testThrowsExceptionIfOutputDirectoryIsNotSet() {
 
@@ -197,7 +197,7 @@ class ThumbnailFactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException BoxUK\Obscura\Exception
      */
     public function testThrowsExceptionIfInputImageIsNotSet() {
 

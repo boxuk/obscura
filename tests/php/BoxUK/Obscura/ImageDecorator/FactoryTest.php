@@ -47,7 +47,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionWhenLoadingFromNonexistentFile() {
 
@@ -56,7 +56,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException BoxUK\Obscura\Exception
      */
     public function testThrowsExceptionWhenCannotDetermineImageFormat() {
 
@@ -65,7 +65,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException BoxUK\Obscura\Exception
      */
     public function testThrowsExceptionWhenUnknownFormatIsSupplied() {
 
