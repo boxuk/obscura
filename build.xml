@@ -5,7 +5,7 @@
     <target name="test" description="Run tests">
         <mkdir dir="log" />
         <mkdir dir="tests/tmp" />
-        <exec command="phpunit --testdox --log-junit log/phpunit.xml tests/php/" passthru="true" checkreturn="true" />
+        <exec command="phpunit --coverage-clover log/clover.xml --testdox --log-junit log/phpunit.xml tests/php/" passthru="true" checkreturn="true" />
     </target>
 
     <target name="pear-package">
