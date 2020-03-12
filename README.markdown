@@ -1,3 +1,5 @@
+# Unmaintained
+
 # Obscura
 
 Obscura is an object-oriented wrapper for the PHP GD image library. It makes common tasks like image thumbnailing
